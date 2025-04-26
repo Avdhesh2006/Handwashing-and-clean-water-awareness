@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>View Videos</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #f5faff;
+    }
+    nav {
+      background: linear-gradient(to right, #007acc, #00c6ff);
+      padding: 1rem;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    nav a {
+      color: white;
+      margin: 0 20px;
+      text-decoration: none;
+      font-size: 1.1rem;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: #ffeb3b;
+    }
+    header {
+      background: linear-gradient(to right, #00c6ff, #0072ff);
+      color: white;
+      text-align: center;
+      padding: 3rem 2rem;
+      border-bottom-left-radius: 50px;
+      border-bottom-right-radius: 50px;
+    }
+    header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    header p {
+      font-size: 1.2rem;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 2rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    .video-card {
+      margin-bottom: 2rem;
+    }
+    video {
+      width: 100%;
+      max-height: 300px;
+      border-radius: 10px;
+    }
+    h3 {
+      margin-top: 1rem;
+      color: #005f99;
+    }
+    p {
+      color: #444;
+    }
+    button {
+      margin-top: 10px;
+      background-color: #ff4d4d;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background-color: #e60000;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html">🏠 Home</a>
+    <a href="upload.html">📤 Upload Video</a>
+    <a href="videos.html">🎥 View Videos</a>
+    <a href="about.html">ℹ️ About</a>
+  </nav>
+
+  <header>
+    <h1>🎥 Uploaded Awareness Videos</h1>
+    <p>Explore and learn from videos created by people committed to hygiene and clean water.</p>
+  </header>
+
+  <div class="container">
+    <div id="videoList"></div>
+  </div>
+
+  <script>
+    function renderVideos() {
+      const videos = JSON.parse(localStorage.getItem('videos') || '[]');
+      const videoList = document.getElementById('videoList');
+      videoList.innerHTML = '';
+
+      if (videos.length === 0) {
+        videoList.innerHTML = '<p>No videos uploaded yet. Be the first to contribute!</p>';
+        return;
+      }
+
+      videos.forEach((video, index) => {
+        const div = document.createElement('div');
+        div.classList.add('video-card');
+        div.innerHTML = `
+          <video controls src="${video.src}"></video>
+          <h3>${video.title}</h3>
+          <p>${video.description}</p>
+          <button onclick="deleteVideo(${index})">Delete</button>
+        `;
+        videoList.appendChild(div);
+      });
+    }
+
+    function deleteVideo(index) {
+      const videos = JSON.parse(localStorage.getItem('videos') || '[]');
+      videos.splice(index, 1);
+      localStorage.setItem('videos', JSON.stringify(videos));
+      renderVideos();
+    }
+
+    renderVideos();
+  </script>
+</body>
+</html>
